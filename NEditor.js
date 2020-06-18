@@ -1,5 +1,11 @@
 //Copyright 2016 Sketchpunk Labs
 
+var eID = 0;
+function get_ID(){
+	eID++;
+	return eID.toString();
+}
+
 //###########################################################################
 //Main Static Object
 //###########################################################################
@@ -311,6 +317,7 @@ NEditor.Node = function(sTitle){
 
 	//.........................
 	this.eRoot = document.createElement("div");
+	this.eRoot.setAttribute("id",get_ID());
 	document.body.appendChild(this.eRoot);
 	this.eRoot.className = "NodeContainer";
 	this.eRoot.ref = this;
@@ -320,12 +327,18 @@ NEditor.Node = function(sTitle){
 	this.eRoot.appendChild(this.eHeader);
 	this.eHeader.innerHTML = this.Title;
 	this.eHeader.addEventListener("mousedown",this.onHeaderDown);
+	this.eHeader.addEventListener("dblclick", this.odDblCkick);
 
+	this.eTypeDiv = document.createElement("div");
+	this.eTypeInput = 
+
+	this.eTypeDiv.innerHTML = '<select name="eltype" id="eltype"><option value="none">--</option><option value="or">OR</option><option value="and">AND</option><option value="transfer">TR</option><option value="primary">P</option></select>';
+	this.eRoot.appendChild(this.eTypeDiv);
+	
 	//.........................
 	this.eList = document.createElement("ul");
 	this.eRoot.appendChild(this.eList);
 };
-
 
 NEditor.Node.prototype.addInput = function(name){
 	var o = new NEditor.Connector(this.eList,true,name) ;
@@ -353,6 +366,27 @@ NEditor.Node.prototype.onHeaderDown = function(e){
 	e.stopPropagation();
 	NEditor.beginNodeDrag(e.target.parentNode,e.pageX,e.pageY);
 };
+
+//Handle title change
+NEditor.Node.prototype.odDblCkick = function(e){
+//	e.stopPropagation();
+	let n = e.target.parentNode;
+	let id = n.getAttribute("id");
+	
+
+	let txt_input = document.createElement("input");
+
+	txt_input.setAttribute("type","text");
+	txt_input.setAttribute("placeholder",name);
+	txt_input.setAttribute("id","title");
+
+
+	n.appendChild(txt_input);
+
+
+
+};
+
 
 NEditor.Node.prototype.setPosition = function(x,y){
 	this.eRoot.style.left = x + "px";
